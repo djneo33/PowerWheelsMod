@@ -30,7 +30,7 @@ void ReadFour();
 
 void setup()
 {
-  Serial.begin(9600);
+  
   pinMode(SteeringInput, INPUT);
   pinMode(ThrottleInput, INPUT);
   pinMode(FourInput, INPUT);
@@ -45,16 +45,22 @@ void setup()
   pinhighSteering = false;
   pinhighThrottle = false;
   pinhighFour = false;
-  past = micros();
+  analogWrite(A_PWM,0);
+  analogWrite(B_PWM,0);
+  analogWrite(L_PWM,0);
+  analogWrite(R_PWM,0);
+  
+  delay(1000);
 }
 
 void loop()
 {
 
+ 
   ReadSteering();
   ReadThrottle();
   ReadFour();
-  Serial.println(Throttle);
+ 
   if (Throttle >= 1600)
   {
     digitalWrite(Ain1, HIGH);
@@ -63,7 +69,7 @@ void loop()
     {
       digitalWrite(Bin1, HIGH);
       digitalWrite(Bin2, LOW);
-      analogWrite(B_PWM, map(Throttle, 1600, 2200, 0, 255));
+      analogWrite(B_PWM, map(Throttle, 1600, 2200, 50, 255));
     }
     else
     {
@@ -71,7 +77,7 @@ void loop()
       digitalWrite(Bin2, HIGH);
       analogWrite(B_PWM, 0);
     }
-    analogWrite(A_PWM, map(Throttle, 1600, 2200, 0, 255));
+    analogWrite(A_PWM, map(Throttle, 1600, 2200, 50, 255));
   }
   if (Throttle <= 1400)
   {
@@ -81,7 +87,7 @@ void loop()
     {
       digitalWrite(Bin1, LOW);
       digitalWrite(Bin2, HIGH);
-      analogWrite(B_PWM, map(Throttle, 1400, 990, 0, 255));
+      analogWrite(B_PWM, map(Throttle, 1400, 990, 50, 255));
     }
     else
     {
@@ -89,17 +95,17 @@ void loop()
       digitalWrite(Bin2, HIGH);
       analogWrite(B_PWM, 0);
     }
-    analogWrite(A_PWM, map(Throttle, 1400, 990, 0, 255));
+    analogWrite(A_PWM, map(Throttle, 1400, 990, 50, 255));
   }
   if (Steering >= 1600)
   {
     analogWrite(R_PWM, 0);
-    analogWrite(L_PWM, map(Steering, 1600, 2200, 0, 255));
+    analogWrite(L_PWM, map(Steering, 1600, 2200, 50, 255));
   }
   if (Steering <= 1400)
   {
     analogWrite(L_PWM, 0);
-    analogWrite(R_PWM, map(Steering, 1400, 990, 0, 255));
+    analogWrite(R_PWM, map(Steering, 1400, 990, 50, 255));
   }
   if (Throttle >= 1400 && Throttle <= 1600){
     analogWrite(A_PWM,0);
